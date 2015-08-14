@@ -15,19 +15,21 @@
     var history = {}
 
     window.addEventListener("load", function() {
-      [].forEach.call(document.querySelectorAll("form"), function(form) {
-        var name = form.getAttribute("name")
-        history[name] = [];
-
-        [].forEach.call(form.querySelectorAll("input"), function(input) {
-
-          var inputName = input.getAttribute("name")
-          input.addEventListener('change', function(e) {
-            if (history[name].slice(-1) != inputName) {
-              history[name].push(inputName)
+      document.addEventListener("change", function(e) {
+        var target = e.target
+        if (target && target.tagName && (target.tagName.toUpperCase() == "INPUT")) {
+          var inputName = target.getAttribute("name")
+          var form = target.form
+          if (form && inputName) {
+            var formName = form.getAttribute("name")
+            if (typeof history[formName] == "undefined") {
+              history[formName] = []
             }
-          })
-        })
+            if (history[formName].slice(-1) != inputName) {
+              history[formName].push(inputName)
+            }
+          }
+        }
       })
     })
 
